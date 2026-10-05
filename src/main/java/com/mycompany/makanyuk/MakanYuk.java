@@ -42,14 +42,25 @@ public class MakanYuk {
         }
     }
 
+    public static void prosesTransaksi(Menu item) {
+        System.out.println("\n[Sistem] Memproses transaksi pesanan...");
+        item.tampilkanInfo();
+        item.caraPenyajian();
+        System.out.println("[Sukses] Transaksi item berhasil diselesaikan!\n");
+    }
+
     public static void main(String[] args) {
         try (Scanner scanner = new Scanner(System.in)) {
             Menu[] daftarMenu = new Menu[10];
             int jumlahMenu = 0;
             boolean isRunning = true;
 
+            daftarMenu[jumlahMenu++] = new Makanan("Nasi Goreng", 25000, 10, "2");
+            daftarMenu[jumlahMenu++] = new Minuman("Es Teh Manis", 5000, 30, "Large");
+            daftarMenu[jumlahMenu++] = new Dessert("Pudding Cokelat", 15000, 12, "Manis Lembut");
+
             System.out.println("==================================================");
-            System.out.println("         SELAMAT DATANG DI MAKANYUK         ");
+            System.out.println("              Selamat Datang di Makan Yuk         ");
             System.out.println("==================================================");
 
             while (isRunning) {
@@ -57,11 +68,12 @@ public class MakanYuk {
                 System.out.println("1. Tambah Menu Baru");
                 System.out.println("2. Lihat Seluruh Daftar Menu");
                 System.out.println("3. Cari Menu");
-                System.out.println("4. Keluar");
-                System.out.print("Pilih Menu (1-4): ");
+                System.out.println("4. Simulasi Transaksi Pesanan");
+                System.out.println("5. Keluar");
+                System.out.print("Pilih Menu (1-5): ");
 
                 int pilihan = scanner.nextInt();
-                scanner.nextLine(); 
+                scanner.nextLine();
 
                 switch (pilihan) {
                     case 1:
@@ -69,7 +81,8 @@ public class MakanYuk {
                             System.out.println("\n--- Pilih Kategori Menu ---");
                             System.out.println("1. Makanan");
                             System.out.println("2. Minuman");
-                            System.out.print("Pilih Kategori (1/2): ");
+                            System.out.println("3. Dessert");
+                            System.out.print("Pilih Kategori (1/2/3): ");
                             int jenis = scanner.nextInt();
                             scanner.nextLine();
 
@@ -89,23 +102,27 @@ public class MakanYuk {
                                 String pedas = scanner.nextLine();
                                 daftarMenu[jumlahMenu] = new Makanan(namaBaru, hargaBaru, stokBaru, pedas);
                             } else if (jenis == 2) {
-                                System.out.print("Masukkan Ukuran (Reg/Lrg)  : ");
+                                System.out.print("Masukkan Ukuran (Reg/Lrg) : ");
                                 String ukuran = scanner.nextLine();
                                 daftarMenu[jumlahMenu] = new Minuman(namaBaru, hargaBaru, stokBaru, ukuran);
+                            } else if (jenis == 3) {
+                                System.out.print("Masukkan Rasa Manis       : ");
+                                String rasa = scanner.nextLine();
+                                daftarMenu[jumlahMenu] = new Dessert(namaBaru, hargaBaru, stokBaru, rasa);
                             } else {
                                 System.out.println("Kategori tidak valid! Menu batal disimpan.");
                                 break;
                             }
 
                             jumlahMenu++;
-                            System.out.println("\n[Sukses] Menu baru berhasil ditambahkan ke sistem!");
+                            System.out.println("\n[Sukses] Menu baru berhasil ditambahkan secara polimorfis!");
                         } else {
-                            System.out.println("\n[Maaf] Kapasitas penyimpanan menu restoran penuh!");
+                            System.out.println("\n[Maaf] Kapasitas penyimpanan menu penuh!");
                         }
                         break;
 
                     case 2:
-                        System.out.println("\n================ DAFTAR MENU MAKANYUK ================");
+                        System.out.println("\n================ DAFTAR MENU RESTORAN ================");
                         if (jumlahMenu == 0) {
                             System.out.println("Belum ada menu yang tersimpan di sistem.");
                         } else {
@@ -121,8 +138,8 @@ public class MakanYuk {
 
                     case 3:
                         System.out.println("\n--- Menu Pencarian ---");
-                        System.out.println("1. Cari Berdasarkan Nama Menu");
-                        System.out.println("2. Cari Berdasarkan Budget Harga Maksimal");
+                        System.out.println("1. Cari Berdasarkan Nama Menu ");
+                        System.out.println("2. Cari Berdasarkan Budget Harga Maksimal ");
                         System.out.print("Pilih Mode Pencarian (1/2): ");
                         int modeCari = scanner.nextInt();
                         scanner.nextLine();
@@ -135,7 +152,7 @@ public class MakanYuk {
                             System.out.print("Masukkan Maksimal Harga (Rp): ");
                             double budget = scanner.nextDouble();
                             scanner.nextLine();
-                            cariMenu(budget, daftarMenu, jumlahMenu); 
+                            cariMenu(budget, daftarMenu, jumlahMenu);
                         } else {
                             System.out.println("Pilihan mode pencarian tidak valid.");
                         }
@@ -145,12 +162,36 @@ public class MakanYuk {
                         break;
 
                     case 4:
-                        System.out.println("\nTerima kasih telah menggunakan MakanYuk. Sampai jumpa!");
+                        System.out.println("\n================ SIMULASI TRANSAKSI ================");
+                        if (jumlahMenu == 0) {
+                            System.out.println("Belum ada menu untuk disimulasikan.");
+                        } else {
+                            System.out.println("Pilih nomor menu yang ingin diproses transaksinya:");
+                            for (int i = 0; i < jumlahMenu; i++) {
+                                System.out.print((i + 1) + ". ");
+                                daftarMenu[i].tampilkanInfo();
+                            }
+                            System.out.print("Pilih Nomor Menu (1-" + jumlahMenu + "): ");
+                            int indexPilih = scanner.nextInt() - 1;
+                            scanner.nextLine();
+
+                            if (indexPilih >= 0 && indexPilih < jumlahMenu) {
+                                prosesTransaksi(daftarMenu[indexPilih]);
+                            } else {
+                                System.out.println("Nomor menu tidak valid.");
+                            }
+                        }
+                        System.out.print("Tekan Enter untuk kembali ke menu...");
+                        scanner.nextLine();
+                        break;
+
+                    case 5:
+                        System.out.println("\nTerima kasih telah menggunakan Makan Yuk Sistem Operasi. Sampai jumpa!");
                         isRunning = false;
                         break;
 
                     default:
-                        System.out.println("\nPilihan menu tidak valid, silakan masukkan angka 1 sampai 4.");
+                        System.out.println("\nPilihan menu tidak valid, silakan masukkan angka 1 sampai 5.");
                         break;
                 }
             }
