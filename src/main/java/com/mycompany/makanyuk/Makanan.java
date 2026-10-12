@@ -8,7 +8,7 @@ package com.mycompany.makanyuk;
  *
  * @author JENY SARAH C SILABAN
  */
-public class Makanan extends Menu{
+public class Makanan extends Menu implements BisaDiskon, BisaDibungkus{
     private String levelPedas;
 
     public Makanan(String nama, double harga, int stok, String levelPedas) {
@@ -33,5 +33,15 @@ public class Makanan extends Menu{
     @Override
     public void caraPenyajian() {
         System.out.println("-> Info Pesanan: Makanan disajikan hangat di atas piring saji.");
+    }
+
+    @Override
+    public double hitungDiskon(double persentase) {
+        return getHarga() - (getHarga() * persentase / 100);
+    }
+
+    @Override
+    public void cetakLabelPacking() {
+        System.out.println("[Label Packing Makanan] Bungkus menggunakan kertas minyak tahan panas + Box eco-friendly untuk:" + getNama());
     }
 }
