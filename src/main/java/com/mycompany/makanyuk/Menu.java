@@ -8,7 +8,7 @@ package com.mycompany.makanyuk;
  *
  * @author JENY SARAH C SILABAN
  */
-public class Menu {
+public abstract class Menu {
     private String nama;
     private double harga;
     private int stok;
