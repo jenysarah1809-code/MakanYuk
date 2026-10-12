@@ -184,8 +184,41 @@ public class MakanYuk {
                         System.out.print("Tekan Enter untuk kembali ke menu...");
                         scanner.nextLine();
                         break;
-
+                    
                     case 5:
+                        System.out.println("\n--- Pengecekan Promo Diskon (Interface BisaDiskon) ---");
+                        System.out.print("Masukkan persentase diskon (contoh: 15 untuk 15%): ");
+                        double diskon = scanner.nextDouble();
+                        scanner.nextLine();
+
+                        for (int i = 0; i < jumlahMenu; i++) {
+                            if (daftarMenu[i] instanceof BisaDiskon) {
+                                BisaDiskon itemDiskon = (BisaDiskon) daftarMenu[i];
+                                double hargaDiskon = itemDiskon.hitungDiskon(diskon);
+                                System.out.println("- " + daftarMenu[i].getNama() + " (Diskon " + diskon + "%): Rp " + hargaDiskon);
+                            } else {
+                                System.out.println("- " + daftarMenu[i].getNama() + " (Tidak ada promo diskon)");
+                            }
+                        }
+                        System.out.print("\nTekan Enter untuk kembali ke menu...");
+                        scanner.nextLine();
+                        break;
+
+                    case 6:
+                        System.out.println("\n--- Cetak Label Packing (Interface BisaDibungkus) ---");
+                        for (int i = 0; i < jumlahMenu; i++) {
+                            if (daftarMenu[i] instanceof BisaDibungkus) {
+                                BisaDibungkus itemBungkus = (BisaDibungkus) daftarMenu[i];
+                                itemBungkus.cetakLabelPacking();
+                            } else {
+                                System.out.println("- " + daftarMenu[i].getNama() + " tidak memerlukan label packing khusus.");
+                            }
+                        }
+                        System.out.print("\nTekan Enter untuk kembali ke menu...");
+                        scanner.nextLine();
+                        break;
+                        
+                    case 7:
                         System.out.println("\nTerima kasih telah menggunakan Makan Yuk Sistem Operasi. Sampai jumpa!");
                         isRunning = false;
                         break;
