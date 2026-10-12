@@ -68,9 +68,11 @@ public class MakanYuk {
                 System.out.println("1. Tambah Menu Baru");
                 System.out.println("2. Lihat Seluruh Daftar Menu");
                 System.out.println("3. Cari Menu");
-                System.out.println("4. Simulasi Transaksi Pesanan");
-                System.out.println("5. Keluar");
-                System.out.print("Pilih Menu (1-5): ");
+                System.out.println("4. Simulasi Proses / Transaksi Pesanan");
+                System.out.println("5. Cek Promo Diskon (Interface BisaDiskon)");
+                System.out.println("6. Cetak Label Packing (Interface BisaDibungkus)");
+                System.out.println("7. Keluar");
+                System.out.print("Pilih Menu (1-7): ");
 
                 int pilihan = scanner.nextInt();
                 scanner.nextLine();
