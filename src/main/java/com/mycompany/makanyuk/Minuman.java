@@ -8,8 +8,8 @@ package com.mycompany.makanyuk;
  *
  * @author JENY SARAH C SILABAN
  */
-public class Minuman extends Menu{
-    private String ukuran; // Regular / Large
+public class Minuman extends Menu implements BisaDibungkus{
+    private String ukuran;
 
     public Minuman(String nama, double harga, int stok, String ukuran) {
         super(nama, harga, stok);
@@ -33,5 +33,10 @@ public class Minuman extends Menu{
     @Override
     public void caraPenyajian() {
         System.out.println("-> Info Pesanan: Minuman disajikan dingin dengan tambahan es batu di gelas.");
+    }
+
+    @Override
+    public void cetakLabelPacking() {
+        System.out.println("[Label Packing Minuman] Masukan cup ke dalam kantong plastik khusus es lengkap dengan sedotan untuk: " + getNama());
     }
 }
