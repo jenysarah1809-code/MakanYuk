@@ -8,7 +8,7 @@ package com.mycompany.makanyuk;
  *
  * @author JENY SARAH C SILABAN
  */
-public class Dessert extends Menu{
+public class Dessert extends Menu implements BisaDiskon{
     private String rasaManis;
 
     public Dessert(String nama, double harga, int stok, String rasaManis) {
@@ -33,5 +33,10 @@ public class Dessert extends Menu{
     @Override
     public void caraPenyajian() {
         System.out.println("-> [Proses Dessert] Hidangan penutup dikeluarkan dari lemari pendingin dan diberi topping manis.");
+    }
+
+    @Override
+    public double hitungDiskon(double persentase) {
+        return getHarga() - (getHarga() * persentase / 100);
     }
 }
