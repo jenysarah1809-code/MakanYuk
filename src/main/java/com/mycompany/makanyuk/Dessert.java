@@ -8,31 +8,28 @@ package com.mycompany.makanyuk;
  *
  * @author JENY SARAH C SILABAN
  */
-public class Dessert extends Menu implements BisaDiskon{
-    private String rasaManis;
 
-    public Dessert(String nama, double harga, int stok, String rasaManis) {
+public class Dessert extends Menu implements BisaDiskon {
+    private String rasa;
+
+    public Dessert(String nama, double harga, int stok, String rasa) throws Exception {
         super(nama, harga, stok);
-        this.rasaManis = rasaManis;
+        this.rasa = rasa;
     }
 
-    public String getrasaManis() {
-        return this.rasaManis;
-    }
-
-    public void setrasaManis(String rasaManis) {
-        this.rasaManis = rasaManis;
+    public String getRasa() {
+        return rasa;
     }
 
     @Override
     public void tampilkanInfo() {
-        System.out.printf("[Dessert]  Nama: %-12s | Harga: Rp %,8.0f | Stok: %-2d | Rasa Manis: %s%n", 
-                getNama(), getHarga(), getStok(), this.rasaManis);
+        System.out.printf("[Dessert] %-12s | Harga: Rp %,10.0f | Stok: %-3d | Rasa: %s%n", 
+                getNama(), getHarga(), getStok(), rasa);
     }
 
     @Override
     public void caraPenyajian() {
-        System.out.println("-> [Proses Dessert] Hidangan penutup dikeluarkan dari lemari pendingin dan diberi topping manis.");
+        System.out.println("Menata hidangan penutup " + getNama() + " beraroma/rasa " + rasa + " di atas piring saji cantik.");
     }
 
     @Override
