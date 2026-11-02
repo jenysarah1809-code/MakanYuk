@@ -8,6 +8,7 @@ package com.mycompany.makanyuk;
  *
  * @author JENY SARAH C SILABAN
  */
+
 public abstract class Menu {
     private String nama;
     private double harga;
@@ -15,14 +16,19 @@ public abstract class Menu {
 
     public static int totalMenuDibuat = 0;
 
-    public Menu(String nama, double harga, int stok) {
+    public Menu(String nama, double harga, int stok) throws Exception {
+        if (harga < 0) {
+            throw new Exception("Harga tidak boleh bernilai negatif!");
+        }
+        if (stok < 0) {
+            throw new Exception("Stok tidak boleh bernilai negatif!");
+        }
         this.nama = nama;
-        setHarga(harga);
-        setStok(stok);
+        this.harga = harga;
+        this.stok = stok;
         totalMenuDibuat++;
     }
 
-    // Encapsulation: Getter & Setter dengan Validasi
     public String getNama() {
         return this.nama;
     }
@@ -39,7 +45,6 @@ public abstract class Menu {
         if (harga >= 0) {
             this.harga = harga;
         } else {
-            System.out.println("Harga tidak boleh negatif! Diset ke 0.");
             this.harga = 0;
         }
     }
@@ -56,7 +61,6 @@ public abstract class Menu {
         }
     }
 
-    // Method untuk di-override
     public void tampilkanInfo() {
         System.out.printf("Menu: %-15s | Harga: Rp %,10.0f | Stok: %d%n", 
                 this.nama, this.harga, this.stok);
