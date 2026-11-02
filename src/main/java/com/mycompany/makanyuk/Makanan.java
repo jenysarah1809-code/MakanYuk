@@ -8,31 +8,31 @@ package com.mycompany.makanyuk;
  *
  * @author JENY SARAH C SILABAN
  */
-public class Makanan extends Menu implements BisaDiskon, BisaDibungkus{
+
+public class Makanan extends Menu implements BisaDiskon, BisaDibungkus {
     private String levelPedas;
 
-    public Makanan(String nama, double harga, int stok, String levelPedas) {
+    public Makanan(String nama, double harga, int stok, String levelPedas) throws Exception {
         super(nama, harga, stok);
+        if (levelPedas.isEmpty()) {
+            throw new Exception("Level pedas tidak boleh kosong!");
+        }
         this.levelPedas = levelPedas;
     }
 
     public String getLevelPedas() {
-        return this.levelPedas;
-    }
-
-    public void setLevelPedas(String levelPedas) {
-        this.levelPedas = levelPedas;
+        return levelPedas;
     }
 
     @Override
     public void tampilkanInfo() {
-        System.out.printf("[Makanan]  Nama: %-12s | Harga: Rp %,8.0f | Stok: %-2d | Pedas: %s%n", 
-                getNama(), getHarga(), getStok(), this.levelPedas);
+        System.out.printf("[Makanan] %-12s | Harga: Rp %,10.0f | Stok: %-3d | Level Pedas: %s%n", 
+                getNama(), getHarga(), getStok(), levelPedas);
     }
 
     @Override
     public void caraPenyajian() {
-        System.out.println("-> Info Pesanan: Makanan disajikan hangat di atas piring saji.");
+        System.out.println("Menggoreng/Memasak hidangan makanan " + getNama() + " dengan tingkat kepedasan " + levelPedas + ".");
     }
 
     @Override
@@ -42,6 +42,6 @@ public class Makanan extends Menu implements BisaDiskon, BisaDibungkus{
 
     @Override
     public void cetakLabelPacking() {
-        System.out.println("[Label Packing Makanan] Bungkus menggunakan kertas minyak tahan panas + Box eco-friendly untuk:" + getNama());
+        System.out.println("[Label Packing Makanan] Bungkus menggunakan kertas minyak tahan panas + Box eco-friendly untuk: " + getNama());
     }
 }
