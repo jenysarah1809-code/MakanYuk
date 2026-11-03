@@ -3,74 +3,35 @@
  */
 
 package com.mycompany.makanyuk;
-
-/**
- *
- * @author JENY SARAH C SILABAN
- */
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+/**
+ *
+ * @author JENY SARAH C SILABAN
+ */
 
 public class MakanYuk {
 
-    // Method pencarian menggunakan Custom Exception dan throws
-    public static void cariMenu(String nama, ArrayList<Menu> daftarMenu) throws MenuTidakDitemukanException {
-        System.out.println("\n--- Hasil Pencarian Berdasarkan Nama: \"" + nama + "\" ---");
-        boolean ditemukan = false;
-        for (int i = 0; i < daftarMenu.size(); i++) {
-            if (daftarMenu.get(i).getNama().equalsIgnoreCase(nama)) {
-                System.out.print("> ");
-                daftarMenu.get(i).tampilkanInfo();
-                ditemukan = true;
-            }
-        }
-        if (!ditemukan) {
-            throw new MenuTidakDitemukanException("Gagal: Menu dengan nama \"" + nama + "\" tidak ditemukan di sistem!");
-        }
-    }
-
-    public static void cariMenu(double maxHarga, ArrayList<Menu> daftarMenu) throws MenuTidakDitemukanException {
-        System.out.println("\n--- Hasil Pencarian Menu dengan Harga Maksimal: Rp " + maxHarga + " ---");
-        boolean ditemukan = false;
-        for (int i = 0; i < daftarMenu.size(); i++) {
-            if (daftarMenu.get(i).getHarga() <= maxHarga) {
-                System.out.print("> ");
-                daftarMenu.get(i).tampilkanInfo();
-                ditemukan = true;
-            }
-        }
-        if (!ditemukan) {
-            throw new MenuTidakDitemukanException("Gagal: Tidak ada menu yang sesuai dengan budget tersebut.");
-        }
-    }
-
-    public static void simulasiProsesPesanan(Menu menuPilihan) {
-        System.out.println("\n--- SIMULASI PROSES TRANSAKSI & PENYAJIAN ---");
-        System.out.println("Memproses item: " + menuPilihan.getNama());
-        menuPilihan.caraPenyajian(); 
-        System.out.println("Status: Pesanan berhasil disiapkan dan diserahkan ke pelanggan!\n");
-    }
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        // Menggunakan ArrayList sesuai modul
-        ArrayList<Menu> daftarMenu = new ArrayList<>();
-        // Menggunakan HashMap untuk manajemen anggota (Key: ID/Member, Value: Nama)
-        HashMap<String, String> dataAnggota = new HashMap<>();
+        
+        // Menginisialisasi objek utama Restoran (menerapkan Composition & Aggregation di dalamnya)
+        Restoran restoKu = new Restoran("MakanYuk Resto Lampung");
+        restoKu.bukaRestoran();
+
         boolean isRunning = true;
 
         try {
-            // Inisialisasi data objek awal (3-5 data objek)
-            daftarMenu.add(new Makanan("Nasi Goreng", 25000, 10, "Level 2"));
-            daftarMenu.add(new Minuman("Es Teh Manis", 5000, 25, "Regular"));
-            daftarMenu.add(new Dessert("Pudding Coklat", 12000, 15, "Manis"));
-            daftarMenu.add(new Makanan("Ayam Geprek", 20000, 8, "Level 3"));
+            // Inisialisasi data awal menu (ArrayList)
+            restoKu.tambahMenu(new Makanan("Nasi Goreng", 25000, 10, "Level 2"));
+            restoKu.tambahMenu(new Minuman("Es Teh Manis", 5000, 25, "Regular"));
+            restoKu.tambahMenu(new Dessert("Pudding Coklat", 12000, 15, "Manis"));
 
-            // Inisialisasi data HashMap awal (2-3 data anggota)
-            dataAnggota.put("M001", "Jeny Sarah");
-            dataAnggota.put("M002", "Budi Santoso");
+            // Inisialisasi data awal pelanggan (HashMap)
+            restoKu.tambahPelanggan(new Pelanggan("P001", "Jeny Sarah"));
+            restoKu.tambahPelanggan(new Pelanggan("P002", "Budi Santoso"));
         } catch (Exception e) {
             System.out.println("Error Inisialisasi: " + e.getMessage());
         }
@@ -83,14 +44,12 @@ public class MakanYuk {
             try {
                 System.out.println("\n================ MENU UTAMA ================");
                 System.out.println("1. Tambah Menu Baru");
-                System.out.println("2. Lihat Seluruh Daftar Menu");
+                System.out.println("2. Lihat Daftar Menu");
                 System.out.println("3. Cari Menu (Demo Custom Exception)");
-                System.out.println("4. Simulasi Proses / Transaksi Pesanan");
-                System.out.println("5. Cek Promo Diskon (Interface BisaDiskon)");
-                System.out.println("6. Cetak Label Packing (Interface BisaDibungkus)");
-                System.out.println("7. Manajemen Anggota (Demo HashMap)");
-                System.out.println("8. Keluar");
-                System.out.print("Pilih Menu (1-8): ");
+                System.out.println("4. Kelola Pelanggan (Demo HashMap)");
+                System.out.println("5. Transaksi Pesanan (Demo Association)");
+                System.out.println("6. Keluar");
+                System.out.print("Pilih Menu (1-6): ");
 
                 int pilihan = scanner.nextInt();
                 scanner.nextLine(); 
@@ -106,117 +65,95 @@ public class MakanYuk {
                         scanner.nextLine();
 
                         System.out.print("Masukkan Nama Menu         : ");
-                        String namaBaru = scanner.nextLine();
-
+                        String nama = scanner.nextLine();
                         System.out.print("Masukkan Harga (Rp)        : ");
-                        double hargaBaru = scanner.nextDouble();
+                        double harga = scanner.nextDouble();
                         scanner.nextLine();
-
                         System.out.print("Masukkan Stok              : ");
-                        int stokBaru = scanner.nextInt();
+                        int stok = scanner.nextInt();
                         scanner.nextLine();
 
                         if (jenis == 1) {
                             System.out.print("Masukkan Level Pedas       : ");
-                            String pedas = scanner.nextLine();
-                            daftarMenu.add(new Makanan(namaBaru, hargaBaru, stokBaru, pedas));
+                            restoKu.tambahMenu(new Makanan(nama, harga, stok, scanner.nextLine()));
                         } else if (jenis == 2) {
                             System.out.print("Masukkan Ukuran (Reg/Lrg)  : ");
-                            String ukuran = scanner.nextLine();
-                            daftarMenu.add(new Minuman(namaBaru, hargaBaru, stokBaru, ukuran));
+                            restoKu.tambahMenu(new Minuman(nama, harga, stok, scanner.nextLine()));
                         } else if (jenis == 3) {
                             System.out.print("Masukkan Karakter Rasa     : ");
-                            String rasa = scanner.nextLine();
-                            daftarMenu.add(new Dessert(namaBaru, hargaBaru, stokBaru, rasa));
+                            restoKu.tambahMenu(new Dessert(nama, harga, stok, scanner.nextLine()));
                         } else {
-                            System.out.println("Kategori tidak valid! Menu batal disimpan.");
-                            break;
+                            System.out.println("Kategori tidak valid!");
                         }
-
-                        System.out.println("\n[Sukses] Menu baru berhasil ditambahkan! Total Menu: " + daftarMenu.size());
                         break;
 
                     case 2:
-                        System.out.println("\n================ DAFTAR MENU MAKANYUK ================");
-                        if (daftarMenu.isEmpty()) {
-                            System.out.println("Belum ada menu yang tersimpan di sistem.");
-                        } else {
-                            for (int i = 0; i < daftarMenu.size(); i++) {
-                                System.out.print((i + 1) + ". ");
-                                daftarMenu.get(i).tampilkanInfo(); 
-                            }
-                            System.out.println("\n* Total Objek Menu Berhasil Dibuat: " + Menu.totalMenuDibuat);
-                        }
+                        System.out.println("\n================ DAFTAR MENU RESTORAN ================");
+                        restoKu.lihatSemuaMenu();
                         System.out.print("\nTekan Enter untuk kembali ke menu...");
                         scanner.nextLine();
                         break;
 
                     case 3:
-                        System.out.println("\n--- Menu Pencarian (Demo Custom Exception & Try-Catch-Finally) ---");
-                        System.out.println("1. Cari Berdasarkan Nama Menu");
-                        System.out.println("2. Cari Berdasarkan Budget Harga Maksimal");
-                        System.out.print("Pilih Mode Pencarian (1/2): ");
-                        int modeCari = scanner.nextInt();
-                        scanner.nextLine();
-
+                        System.out.println("\n--- Fitur Cari Menu (Custom Exception) ---");
+                        System.out.print("Masukkan Nama Menu yang dicari: ");
+                        String kataKunci = scanner.nextLine();
                         try {
-                            if (modeCari == 1) {
-                                System.out.print("Masukkan Nama Menu: ");
-                                String kataKunci = scanner.nextLine();
-                                cariMenu(kataKunci, daftarMenu); 
-                            } else if (modeCari == 2) {
-                                System.out.print("Masukkan Maksimal Harga (Rp): ");
-                                double budget = scanner.nextDouble();
-                                scanner.nextLine();
-                                cariMenu(budget, daftarMenu); 
-                            } else {
-                                System.out.println("Pilihan mode pencarian tidak valid.");
-                            }
+                            restoKu.cariMenu(kataKunci);
                         } catch (MenuTidakDitemukanException e) {
-                            System.out.println("[PERINGATAN CUSTOM EXCEPTION] " + e.getMessage());
-                        } finally {
-                            System.out.println("-> Sesi pencarian selesai dieksekusi.");
+                            System.out.println("[PERINGATAN] " + e.getMessage());
                         }
-
                         System.out.print("\nTekan Enter untuk kembali ke menu...");
                         scanner.nextLine();
                         break;
 
                     case 4:
-                        System.out.println("\n--- Simulasi Transaksi ---");
-                        if (daftarMenu.isEmpty()) {
-                            System.out.println("Belum ada menu untuk disimulasikan.");
-                        } else {
-                            for (int i = 0; i < daftarMenu.size(); i++) {
-                                System.out.println((i + 1) + ". " + daftarMenu.get(i).getNama() + " (" + daftarMenu.get(i).getClass().getSimpleName() + ")");
-                            }
-                            System.out.print("Pilih nomor menu: ");
-                            int indeksPilih = scanner.nextInt();
-                            scanner.nextLine();
+                        System.out.println("\n--- Kelola Pelanggan (HashMap) ---");
+                        System.out.println("1. Tambah Pelanggan");
+                        System.out.println("2. Cari Pelanggan via ID");
+                        System.out.println("3. Lihat Semua Pelanggan");
+                        System.out.print("Pilih (1-3): ");
+                        int menuP = scanner.nextInt();
+                        scanner.nextLine();
 
-                            if (indeksPilih >= 1 && indeksPilih <= daftarMenu.size()) {
-                                simulasiProsesPesanan(daftarMenu.get(indeksPilih - 1));
-                            } else {
-                                System.out.println("Pilihan nomor tidak valid.");
-                            }
+                        if (menuP == 1) {
+                            System.out.print("Masukkan ID Pelanggan: ");
+                            String id = scanner.nextLine();
+                            System.out.print("Masukkan Nama Pelanggan: ");
+                            String namaP = scanner.nextLine();
+                            restoKu.tambahPelanggan(new Pelanggan(id, namaP));
+                        } else if (menuP == 2) {
+                            System.out.print("Masukkan ID yang dicari: ");
+                            restoKu.cariPelanggan(scanner.nextLine());
+                        } else if (menuP == 3) {
+                            restoKu.lihatSemuaPelanggan();
                         }
-                        System.out.print("Tekan Enter untuk kembali ke menu...");
+                        System.out.print("\nTekan Enter untuk kembali ke menu...");
                         scanner.nextLine();
                         break;
 
                     case 5:
-                        System.out.println("\n--- Pengecekan Promo Diskon (Interface BisaDiskon) ---");
-                        System.out.print("Masukkan persentase diskon (contoh: 15 untuk 15%): ");
-                        double diskon = scanner.nextDouble();
-                        scanner.nextLine();
+                        System.out.println("\n--- Sistem Transaksi Pesanan (Association) ---");
+                        System.out.print("Masukkan ID Pelanggan: ");
+                        String inputId = scanner.nextLine();
+                        Pelanggan pembeli = restoKu.getPelanggan(inputId);
 
-                        for (int i = 0; i < daftarMenu.size(); i++) {
-                            if (daftarMenu.get(i) instanceof BisaDiskon) {
-                                BisaDiskon itemDiskon = (BisaDiskon) daftarMenu.get(i);
-                                double hargaDiskon = itemDiskon.hitungDiskon(diskon);
-                                System.out.printf("- %s (Diskon %.0f%%): Rp %,10.0f%n", daftarMenu.get(i).getNama(), diskon, hargaDiskon);
+                        if (pembeli == null) {
+                            System.out.println("Gagal: Pelanggan dengan ID tersebut belum terdaftar!");
+                        } else if (restoKu.getJumlahMenu() == 0) {
+                            System.out.println("Gagal: Belum ada menu yang tersedia untuk dipesan.");
+                        } else {
+                            restoKu.lihatSemuaMenu();
+                            System.out.print("Pilih Nomor Menu yang ingin dipesan: ");
+                            int noMenu = scanner.nextInt() - 1;
+                            scanner.nextLine();
+
+                            if (noMenu >= 0 && noMenu < restoKu.getJumlahMenu()) {
+                                Menu menuDipilih = restoKu.getMenuInt(noMenu);
+                                // Menerapkan relasi Asosiasi pada method prosesPesan
+                                TransaksiPesan.prosesPesan(pembeli, menuDipilih);
                             } else {
-                                System.out.println("- " + daftarMenu.get(i).getNama() + " (Tidak ada promo diskon)");
+                                System.out.println("Nomor menu tidak valid!");
                             }
                         }
                         System.out.print("\nTekan Enter untuk kembali ke menu...");
@@ -224,72 +161,19 @@ public class MakanYuk {
                         break;
 
                     case 6:
-                        System.out.println("\n--- Cetak Label Packing (Interface BisaDibungkus) ---");
-                        for (int i = 0; i < daftarMenu.size(); i++) {
-                            if (daftarMenu.get(i) instanceof BisaDibungkus) {
-                                BisaDibungkus itemBungkus = (BisaDibungkus) daftarMenu.get(i);
-                                itemBungkus.cetakLabelPacking();
-                            } else {
-                                System.out.println("- " + daftarMenu.get(i).getNama() + " tidak memerlukan label packing khusus.");
-                            }
-                        }
-                        System.out.print("\nTekan Enter untuk kembali ke menu...");
-                        scanner.nextLine();
-                        break;
-
-                    case 7:
-                        System.out.println("\n--- Kelola Anggota (Demo HashMap) ---");
-                        System.out.println("1. Tambah Anggota Baru");
-                        System.out.println("2. Cari Anggota via ID/NPM");
-                        System.out.println("3. Tampilkan Semua Anggota");
-                        System.out.print("Pilih (1-3): ");
-                        int menuAnggota = scanner.nextInt();
-                        scanner.nextLine();
-
-                        if (menuAnggota == 1) {
-                            System.out.print("Masukkan ID/NPM (sebagai Key): ");
-                            String idAnggota = scanner.nextLine();
-                            System.out.print("Masukkan Nama Lengkap (sebagai Value): ");
-                            String namaAnggota = scanner.nextLine();
-
-                            dataAnggota.put(idAnggota, namaAnggota);
-                            System.out.println("Berhasil menambahkan anggota baru!");
-                        } else if (menuAnggota == 2) {
-                            System.out.print("Masukkan ID/NPM yang dicari: ");
-                            String searchId = scanner.nextLine();
-
-                            if (dataAnggota.containsKey(searchId)) {
-                                System.out.println("Ditemukan! Nama Anggota: " + dataAnggota.get(searchId));
-                            } else {
-                                System.out.println("Anggota dengan ID/NPM tersebut tidak terdaftar.");
-                            }
-                        } else if (menuAnggota == 3) {
-                            System.out.println("Total Anggota Terdaftar: " + dataAnggota.size());
-                            for (String keyId : dataAnggota.keySet()) {
-                                System.out.println("- ID/NPM: " + keyId + " | Nama: " + dataAnggota.get(keyId));
-                            }
-                        } else {
-                            System.out.println("Pilihan tidak valid.");
-                        }
-
-                        System.out.print("\nTekan Enter untuk kembali ke menu...");
-                        scanner.nextLine();
-                        break;
-
-                    case 8:
-                        System.out.println("\nTerima kasih telah menggunakan MakanYuk. Sampai jumpa!");
+                        System.out.println("\nTerima kasih telah menggunakan sistem MakanYuk!");
                         isRunning = false;
                         break;
 
                     default:
-                        System.out.println("\nPilihan menu tidak valid, silakan masukkan angka 1 sampai 8.");
+                        System.out.println("Pilihan menu tidak valid.");
                         break;
                 }
             } catch (InputMismatchException e) {
-                System.out.println("\n[ERROR INPUT] Terjadi kesalahan: Anda harus memasukkan format angka yang valid!");
-                scanner.nextLine(); // membersihkan buffer scanner
+                System.out.println("\n[ERROR INPUT] Harap masukkan format angka yang valid!");
+                scanner.nextLine();
             } catch (Exception e) {
-                System.out.println("\n[SYSTEM ERROR] Terjadi kesalahan: " + e.getMessage());
+                System.out.println("\n[SYSTEM ERROR] " + e.getMessage());
             }
         }
         scanner.close();
