@@ -9,7 +9,11 @@ package com.mycompany.makanyuk;
  * @author JENY SARAH C SILABAN
  */
 
-public abstract class Menu {
+import java.io.Serializable;
+
+public abstract class Menu implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String nama;
     private double harga;
     private int stok;
