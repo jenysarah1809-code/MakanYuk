@@ -8,7 +8,11 @@ package com.mycompany.makanyuk;
  *
  * @author JENY SARAH C SILABAN
  */
-public class DapurRestoran {
+import java.io.Serializable;
+
+public class DapurRestoran implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
     private String namaBagian;
     private int jumlahKoki;
 
